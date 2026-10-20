@@ -4,8 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shaheen's Pharmacy - Online Order Portal</title>
-    <!-- Link to external stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --brand-red: #D32F2F;
+            --brand-mustard: #FBC02D;
+            --brand-mustard-light: #FFF9C4;
+            --dark-neutral: #212121;
+            --light-bg: #F8F9FA;
+            --border-color: #DEE2E6;
+            --whatsapp-green: #25D366;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        body { background-color: var(--light-bg); color: var(--dark-neutral); line-height: 1.5; padding-bottom: 40px; }
+        header { background-color: var(--brand-red); color: white; padding: 20px 10px; text-align: center; border-bottom: 6px solid var(--brand-mustard); }
+        .container { max-width: 750px; margin: 25px auto; padding: 0 15px; }
+        .notice-bar { background-color: var(--brand-mustard-light); border-left: 6px solid var(--brand-mustard); padding: 15px; margin-bottom: 25px; border-radius: 6px; font-size: 14px; }
+        .notice-bar ul { margin-left: 20px; margin-top: 6px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 25px; border: 1px solid #ECEFF1; }
+        .section-title { font-size: 18px; color: var(--brand-red); margin-bottom: 15px; border-bottom: 2px solid var(--brand-mustard); padding-bottom: 6px; font-weight: 700; }
+        .search-box { width: 100%; padding: 12px 15px; border: 2px solid var(--border-color); border-radius: 6px; font-size: 16px; margin-bottom: 15px; }
+        .category-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 15px; }
+        .tab { background: #E9ECEF; padding: 8px 16px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer; border: none; font-weight: 600; color: #495057; }
+        .tab.active { background: var(--brand-red); color: white; }
+        .medicine-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-height: 320px; overflow-y: auto; }
+        @media (max-width: 540px) { .medicine-grid { grid-template-columns: 1fr; } }
+        .med-item { border: 1px solid #E2E8F0; padding: 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; background: #F8FAFC; }
+        .med-info h4 { font-size: 14px; color: #1A202C; font-weight: 600;}
+        .med-info p { font-size: 12px; color: #718096; margin-top: 2px;}
+        .med-price { font-weight: 700; color: var(--brand-red); font-size: 14px; margin-top: 4px;}
+        .btn-add { background: var(--brand-mustard); color: #212121; border: none; padding: 7px 14px; border-radius: 4px; font-weight: 700; cursor: pointer; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #EDF2F7; }
+        .qty-btn { background: #E2E8F0; border: none; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .empty-cart { text-align: center; color: #A0AEC0; padding: 25px 0; font-size: 14px; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; }
+        .required { color: var(--brand-red); }
+        input[type="text"], input[type="tel"], textarea, select { width: 100%; padding: 10px 12px; border: 1px solid #CBD5E0; border-radius: 5px; font-size: 15px; }
+        .radio-group { display: flex; gap: 25px; margin-top: 5px; }
+        .toggle-box { background: #FFFDE7; padding: 12px; border-radius: 6px; border: 1px dashed var(--brand-mustard); }
+        .checkbox-container { display: flex; align-items: flex-start; gap: 10px; margin-top: 12px; }
+        .summary-table { width: 100%; border-collapse: collapse; }
+        .summary-table td { padding: 8px 0; font-size: 15px; }
+        .summary-table .total-row { border-top: 2px solid #E2E8F0; font-weight: 800; font-size: 19px; color: var(--brand-red); }
+        .text-right { text-align: right; }
+        .validation-error-box { padding: 12px 15px; background-color: #FFEBEE; border-left: 5px solid var(--brand-red); margin: 20px 0; border-radius: 4px; font-size: 13px; color: #C62828; }
+        .preview-box { background-color: #E5DDD5; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 13px; white-space: pre-wrap; max-height: 220px; overflow-y: auto; margin-top: 5px; }
+        .btn-submit { display: block; width: 100%; background-color: var(--whatsapp-green); color: white; border: none; padding: 16px; font-size: 18px; font-weight: 700; border-radius: 6px; cursor: pointer; text-align: center; margin-top: 20px; }
+        .btn-submit:disabled { background-color: #CBD5E0; color: #718096; cursor: not-allowed; }
+    </style>
 </head>
 <body>
 
@@ -17,75 +63,58 @@
     </header>
 
     <main class="container">
-        <!-- Delivery Guidelines Announcement -->
         <section class="notice-bar">
             <strong>🕒 Official Order Timings & Business Rules:</strong>
             <ul>
                 <li>Orders placed after <strong>4:00 PM</strong> will be delivered tomorrow morning.</li>
-                <li>Standard delivery fulfillment window: <strong>4 to 8 hours</strong> (Dispatch cycle starts daily at 10:00 AM).</li>
-                <li>⛔ Minimum Order Threshold requirement: <strong>Rs. 1,000</strong>.</li>
-                <li>🚚 Shipping Fee: Rs. 100 (Get <strong>FREE Delivery</strong> automatically for orders above Rs. 2,000).</li>
+                <li>Delivery fulfillment window: <strong>4 to 8 hours</strong> (Starts daily at 10:00 AM).</li>
+                <li>⛔ Minimum Order requirement: <strong>Rs. 1,000</strong>.</li>
+                <li>🚚 Shipping Fee: Rs. 100 (<strong>FREE Delivery</strong> above Rs. 2,000).</li>
             </ul>
         </section>
 
-        <!-- Catalog Search & Filter Section -->
         <section class="card">
             <h2 class="section-title">🛒 Search & Add Medicines</h2>
-            <input type="text" id="searchBar" class="search-box" placeholder="Search medicine catalog (e.g., Panadol, Augmentin, Risek)...">
-            
+            <input type="text" id="searchBar" class="search-box" placeholder="Search medicine catalog...">
             <div class="category-tabs" id="categoryTabs">
                 <button class="tab active" data-category="All">All Medicines</button>
                 <button class="tab" data-category="Pain Relief">Pain Relief</button>
                 <button class="tab" data-category="Antibiotics">Antibiotics</button>
                 <button class="tab" data-category="Allergy & Cold">Allergy & Cold</button>
                 <button class="tab" data-category="Chronic Care">Chronic Care</button>
-                <button class="tab" data-category="General">Quick Shortcuts</button>
+                <button class="tab" data-category="General">Shortcuts</button>
             </div>
-
-            <div class="medicine-grid" id="medicineList">
-                <!-- Dynamically populated via app.js -->
-            </div>
+            <div class="medicine-grid" id="medicineList"></div>
         </section>
 
-        <!-- Selected Items Basket Summary -->
         <section class="card">
             <h2 class="section-title">📋 Selected Items Basket</h2>
             <div id="cartContents">
-                <div class="empty-cart">Your shopping basket is empty. Search and add products above.</div>
+                <div class="empty-cart">Your shopping basket is empty.</div>
             </div>
         </section>
 
-        <!-- Customer Form Profiles -->
         <section class="card">
             <h2 class="section-title">👤 Checkout & Fulfillment Details</h2>
-            
             <div class="form-group">
                 <label for="custName">Customer Full Name <span class="required">*</span></label>
                 <input type="text" id="custName" placeholder="Enter full name">
             </div>
-            
             <div class="form-group">
-                <label for="custPhone">Contact Phone Number (WhatsApp preferred) <span class="required">*</span></label>
+                <label for="custPhone">Contact Phone Number <span class="required">*</span></label>
                 <input type="tel" id="custPhone" placeholder="e.g., 03239613323">
             </div>
-
             <div class="form-group">
                 <label>Fulfillment Preference <span class="required">*</span></label>
                 <div class="radio-group">
-                    <label class="radio-label">
-                        <input type="radio" name="fulfillment" value="Delivery" checked> Home Delivery
-                    </label>
-                    <label class="radio-label">
-                        <input type="radio" name="fulfillment" value="Pickup"> In-Store Pickup
-                    </label>
+                    <label><input type="radio" name="fulfillment" value="Delivery" checked> Home Delivery</label>
+                    <label><input type="radio" name="fulfillment" value="Pickup"> In-Store Pickup</label>
                 </div>
             </div>
-
             <div class="form-group" id="addressWrapper">
                 <label for="custAddress">Complete Delivery Address <span class="required">*</span></label>
-                <textarea id="custAddress" rows="2" placeholder="House number, Street, Block, Area/Sector, City"></textarea>
+                <textarea id="custAddress" rows="2" placeholder="Complete address detail"></textarea>
             </div>
-
             <div class="form-group">
                 <label for="paymentMethod">Preferred Payment Method</label>
                 <select id="paymentMethod">
@@ -94,73 +123,29 @@
                     <option value="JazzCash">JazzCash</option>
                 </select>
             </div>
-
             <div class="form-group toggle-box">
-                <div class="toggle-flex">
-                    <input type="checkbox" id="callbackToggle">
-                    <label for="callbackToggle">📞 Request phone call consultation / verbal confirmation from on-duty Pharmacist.</label>
-                </div>
+                <input type="checkbox" id="callbackToggle">
+                <label for="callbackToggle" style="display:inline; margin-left:5px; font-weight:600; color:#5D4037;">📞 Request phone call consultation from Pharmacist.</label>
             </div>
-
             <div class="form-group">
-                <label for="orderNotes">Special Instructions / Notes for Pharmacist</label>
-                <textarea id="orderNotes" rows="2" placeholder="e.g., Please bring change for Rs. 5,000 / if out of stock, substitute with generic alternative."></textarea>
+                <label for="orderNotes">Special Instructions / Notes</label>
+                <textarea id="orderNotes" rows="2" placeholder="e.g., Please bring change for Rs. 5,000"></textarea>
             </div>
         </section>
 
-        <!-- Prescription Upload Validation Block -->
         <section class="card">
             <h2 class="section-title">📸 Prescription Verification</h2>
             <div class="form-group">
-                <label for="prescriptionFile">Attach Prescription File (Mandatory for Antibiotics & Scheduled Rx)</label>
+                <label for="prescriptionFile">Attach Prescription File (Optional for OTC)</label>
                 <input type="file" id="prescriptionFile" accept="image/*,application/pdf">
-                <p id="fileStatus" class="success-note" style="display:none;">✓ Prescription file attached to local staging session template.</p>
             </div>
-            
             <div class="checkbox-container">
                 <input type="checkbox" id="legalDisclaimer">
-                <label for="legalDisclaimer" class="legal-text">
-                    I confirm that I will present the original physical paper prescription slip to the delivery agent or counter pharmacist upon pickup/delivery of restricted medicines. <span class="required">*</span>
+                <label for="legalDisclaimer" style="font-size:13px; color:#555;">
+                    I confirm that I will present the original physical paper prescription slip upon pickup/delivery. <span class="required">*</span>
                 </label>
             </div>
         </section>
 
-        <!-- Checkout Billing Panel -->
-        <section class="card summary-card">
+        <section class="card">
             <h2 class="section-title">💰 Final Bill Summary & Validation</h2>
-            <table class="summary-table">
-                <tbody>
-                    <tr>
-                        <td>Items Basket Subtotal:</td>
-                        <td class="text-right">Rs. <span id="subtotalVal">0</span></td>
-                    </tr>
-                    <tr id="deliveryFeeRow">
-                        <td>Delivery Handling Fee:</td>
-                        <td class="text-right">Rs. <span id="deliveryVal">100</span></td>
-                    </tr>
-                    <tr class="total-row">
-                        <td>Estimated Total Payable:</td>
-                        <td class="text-right">Rs. <span id="totalVal">0</span></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <!-- Dynamic Error Log UI Box -->
-            <div id="validationAlerts" class="validation-error-box">
-                <strong>⚠️ Actions Required to Proceed:</strong>
-                <ul id="errorList">
-                    <li>Minimum order value must be at least Rs. 1,000 to submit checkout.</li>
-                </ul>
-            </div>
-
-            <label class="preview-label">💬 Live WhatsApp Text Message Payload View:</label>
-            <div class="preview-box" id="whatsappPreview">Fill out form data and add medicines to view generated raw template stream summary text...</div>
-
-            <button id="submitOrderBtn" class="btn-submit" disabled>🚀 Open WhatsApp & Submit Order</button>
-        </section>
-    </main>
-
-    <!-- Link to external application logic script -->
-    <script src="app.js"></script>
-</body>
-</html>
