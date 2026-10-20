@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shaheen's Pharmacy - Online Order Portal</title>
+    <!-- Link to external stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <h1>🦅 Shaheen's Pharmacy</h1>
+            <p>Your Trusted Health Partner</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Delivery Guidelines Announcement -->
+        <section class="notice-bar">
+            <strong>🕒 Official Order Timings & Business Rules:</strong>
+            <ul>
+                <li>Orders placed after <strong>4:00 PM</strong> will be delivered tomorrow morning.</li>
+                <li>Standard delivery fulfillment window: <strong>4 to 8 hours</strong> (Dispatch cycle starts daily at 10:00 AM).</li>
+                <li>⛔ Minimum Order Threshold requirement: <strong>Rs. 1,000</strong>.</li>
+                <li>🚚 Shipping Fee: Rs. 100 (Get <strong>FREE Delivery</strong> automatically for orders above Rs. 2,000).</li>
+            </ul>
+        </section>
+
+        <!-- Catalog Search & Filter Section -->
+        <section class="card">
+            <h2 class="section-title">🛒 Search & Add Medicines</h2>
+            <input type="text" id="searchBar" class="search-box" placeholder="Search medicine catalog (e.g., Panadol, Augmentin, Risek)...">
+            
+            <div class="category-tabs" id="categoryTabs">
+                <button class="tab active" data-category="All">All Medicines</button>
+                <button class="tab" data-category="Pain Relief">Pain Relief</button>
+                <button class="tab" data-category="Antibiotics">Antibiotics</button>
+                <button class="tab" data-category="Allergy & Cold">Allergy & Cold</button>
+                <button class="tab" data-category="Chronic Care">Chronic Care</button>
+                <button class="tab" data-category="General">Quick Shortcuts</button>
+            </div>
+
+            <div class="medicine-grid" id="medicineList">
+                <!-- Dynamically populated via app.js -->
+            </div>
+        </section>
+
+        <!-- Selected Items Basket Summary -->
+        <section class="card">
+            <h2 class="section-title">📋 Selected Items Basket</h2>
+            <div id="cartContents">
+                <div class="empty-cart">Your shopping basket is empty. Search and add products above.</div>
+            </div>
+        </section>
+
+        <!-- Customer Form Profiles -->
+        <section class="card">
+            <h2 class="section-title">👤 Checkout & Fulfillment Details</h2>
+            
+            <div class="form-group">
+                <label for="custName">Customer Full Name <span class="required">*</span></label>
+                <input type="text" id="custName" placeholder="Enter full name">
+            </div>
+            
+            <div class="form-group">
+                <label for="custPhone">Contact Phone Number (WhatsApp preferred) <span class="required">*</span></label>
+                <input type="tel" id="custPhone" placeholder="e.g., 03239613323">
+            </div>
+
+            <div class="form-group">
+                <label>Fulfillment Preference <span class="required">*</span></label>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="fulfillment" value="Delivery" checked> Home Delivery
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="fulfillment" value="Pickup"> In-Store Pickup
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group" id="addressWrapper">
+                <label for="custAddress">Complete Delivery Address <span class="required">*</span></label>
+                <textarea id="custAddress" rows="2" placeholder="House number, Street, Block, Area/Sector, City"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="paymentMethod">Preferred Payment Method</label>
+                <select id="paymentMethod">
+                    <option value="Cash on Delivery (COD)">Cash on Delivery (COD)</option>
+                    <option value="EasyPaisa">EasyPaisa</option>
+                    <option value="JazzCash">JazzCash</option>
+                </select>
+            </div>
+
+            <div class="form-group toggle-box">
+                <div class="toggle-flex">
+                    <input type="checkbox" id="callbackToggle">
+                    <label for="callbackToggle">📞 Request phone call consultation / verbal confirmation from on-duty Pharmacist.</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="orderNotes">Special Instructions / Notes for Pharmacist</label>
+                <textarea id="orderNotes" rows="2" placeholder="e.g., Please bring change for Rs. 5,000 / if out of stock, substitute with generic alternative."></textarea>
+            </div>
+        </section>
+
+        <!-- Prescription Upload Validation Block -->
+        <section class="card">
+            <h2 class="section-title">📸 Prescription Verification</h2>
+            <div class="form-group">
+                <label for="prescriptionFile">Attach Prescription File (Mandatory for Antibiotics & Scheduled Rx)</label>
+                <input type="file" id="prescriptionFile" accept="image/*,application/pdf">
+                <p id="fileStatus" class="success-note" style="display:none;">✓ Prescription file attached to local staging session template.</p>
+            </div>
+            
+            <div class="checkbox-container">
+                <input type="checkbox" id="legalDisclaimer">
+                <label for="legalDisclaimer" class="legal-text">
+                    I confirm that I will present the original physical paper prescription slip to the delivery agent or counter pharmacist upon pickup/delivery of restricted medicines. <span class="required">*</span>
+                </label>
+            </div>
+        </section>
+
+        <!-- Checkout Billing Panel -->
+        <section class="card summary-card">
+            <h2 class="section-title">💰 Final Bill Summary & Validation</h2>
+            <table class="summary-table">
+                <tbody>
+                    <tr>
+                        <td>Items Basket Subtotal:</td>
+                        <td class="text-right">Rs. <span id="subtotalVal">0</span></td>
+                    </tr>
+                    <tr id="deliveryFeeRow">
+                        <td>Delivery Handling Fee:</td>
+                        <td class="text-right">Rs. <span id="deliveryVal">100</span></td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>Estimated Total Payable:</td>
+                        <td class="text-right">Rs. <span id="totalVal">0</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Dynamic Error Log UI Box -->
+            <div id="validationAlerts" class="validation-error-box">
+                <strong>⚠️ Actions Required to Proceed:</strong>
+                <ul id="errorList">
+                    <li>Minimum order value must be at least Rs. 1,000 to submit checkout.</li>
+                </ul>
+            </div>
+
+            <label class="preview-label">💬 Live WhatsApp Text Message Payload View:</label>
+            <div class="preview-box" id="whatsappPreview">Fill out form data and add medicines to view generated raw template stream summary text...</div>
+
+            <button id="submitOrderBtn" class="btn-submit" disabled>🚀 Open WhatsApp & Submit Order</button>
+        </section>
+    </main>
+
+    <!-- Link to external application logic script -->
+    <script src="app.js"></script>
+</body>
+</html>
